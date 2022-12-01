@@ -1,17 +1,3 @@
-// export const usePagination = ({
-//   totalCount,
-//   pageSize,
-//   siblingCount = 1,
-//   currentPage
-// }) => {
-//   const paginationRange = useMemo(() => {
-//      // Our implementation logic will go here
-
-//   }, [totalCount, pageSize, siblingCount, currentPage]);
-
-//   return paginationRange;
-// };
-
 import { useEffect, useReducer, useRef } from "react";
 
 function useFetch(url, options) {
@@ -30,7 +16,7 @@ function useFetch(url, options) {
       case "loading":
         return { ...initialState, loading: true };
       case "fetched":
-        return { ...initialState, data: action.payload, laoding: false };
+        return { ...initialState, data: action.payload, loading: false };
       case "error":
         return { ...initialState, error: action.payload, loading: false };
       default:

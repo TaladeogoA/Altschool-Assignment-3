@@ -1,14 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.scss";
-import Logo from "../../images/pokemon-logo.png";
 
 const Navbar = () => {
   return (
     <nav>
       <div className="nav__logo">
         <Link to="/">
-          <p>USER DATABASE</p>
+          <h1>USER DATABASE</h1>
         </Link>
       </div>
 

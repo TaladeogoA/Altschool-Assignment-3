@@ -13,9 +13,8 @@ function App() {
       <Navbar />
       <ErrorBoundary>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route path="/:personId" element={<Person />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/:personId" element={<Person />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="*" element={<Error />} />
         </Routes>

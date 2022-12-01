@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Home.scss";
 
 const Home = () => {
@@ -11,12 +11,19 @@ const Home = () => {
   const fetchPeople = async () => {
     const response = await fetch("https://randomuser.me/api/?results=50");
     const data = await response.json();
-    console.log(data.results);
+    localStorage.setItem("people", JSON.stringify(data.results));
+    // console.log(data.results);
     setPeople(data.results);
   };
 
   useEffect(() => {
-    fetchPeople();
+    if (localStorage.getItem("people") === null) {
+      fetchPeople();
+      console.log("fetching from api");
+    } else {
+      setPeople(JSON.parse(localStorage.getItem("people")));
+      console.log("fetching from local storage");
+    }
   }, []);
 
   // Pagination
@@ -34,26 +41,29 @@ const Home = () => {
   const pageNumbers = [...Array(pageNumber + 1).keys()].slice(1);
 
   return (
-    <section>
+    <section className="hero-bg">
       <div className="hero">
-        <h1 className="hero__title">Find a person</h1>
+        <h1 className="hero__title">Showing all {people.length} people</h1>
       </div>
 
       <div className="cards">
         {currentPeople.map((people) => {
           return (
-            <div className="card" key={people.index}>
+            <div className="card" key={people?.login?.uuid}>
               <div className="card__image">
                 <img src={people.picture.large} alt={people.name.first} />
               </div>
+
               <div className="card__content">
-                <h3 className="card__title">{`
-                  ${people.name.first} ${people.name.last}
+                <h3>{`${people?.name?.title} 
+                  ${people?.name?.first} ${people?.name?.last}
                 `}</h3>
+
+                <p>{people?.email}</p>
               </div>
 
-              <div className="card__footer">
-                <Link to={`/person/${people.index}`}>
+              <div className="card-button">
+                <Link to={`/${people?.login?.uuid}`}>
                   <button className="card__button">View Profile</button>
                 </Link>
               </div>
@@ -101,8 +111,6 @@ const Home = () => {
           Next
         </button>
       </div>
-
-      <Outlet />
     </section>
   );
 };

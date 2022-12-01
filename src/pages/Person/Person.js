@@ -1,13 +1,52 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import "./Person.scss";
 
 const Person = () => {
-  const { id } = useParams();
+  const { personId } = useParams();
+  const [person, setPerson] = useState(null);
+
+  // filter person from existing data in local storage
+  const fetchPerson = () => {
+    const people = JSON.parse(localStorage.getItem("people"));
+    // console.log(people);
+    const person = people.filter((person) => person.login.uuid === personId);
+    // console.log(person);
+    setPerson(person[0]);
+  };
+
+  useEffect(() => {
+    fetchPerson();
+  }, []);
 
   return (
-    <div>
-      <h1>Person {id}</h1>
-    </div>
+    <section className="person">
+      <div className="person__image">
+        <img
+          src={person?.picture.large}
+          alt={person?.name.first + " " + person?.name.last}
+        />
+      </div>
+
+      <div className="person__content">
+        <h3 className="person__name">{`${person?.name?.first} ${person?.name?.last}`}</h3>
+
+        <p className="person__text">
+          {person?.location?.street?.number} {person?.location?.street?.name},
+          Location: {person?.location?.city}, {person?.location?.state},{" "}
+          {person?.location?.country}
+        </p>
+        <p className="person__text">Email: {person?.email}</p>
+        <p className="person__text">Phone: {person?.phone}</p>
+        <p className="person__text">Mobile: {person?.cell}</p>
+      </div>
+
+      <div className="person__button">
+        <Link to="/">
+          <button className="person__button">Back</button>
+        </Link>
+      </div>
+    </section>
   );
 };
 
